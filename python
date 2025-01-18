@@ -1,0 +1,85 @@
+"""
+Amelia is learning to work with user-defined Python modules and wants to implement a string compression and expansion utility. The task involves creating a module named string_compression.py that defines a class StringCompression with methods to compress and expand strings. Then, a separate script, main.py, will use this module to handle input and display the results. 
+
+
+
+Write a program to implement and test this functionality.
+
+Input format :
+The first line contains a string to compress S, consisting of lowercase alphabets.
+
+The second line contains a string in compressed form C, where each character is followed by its count.
+
+Output format :
+The first line of output prints the compressed form of S.
+
+The second line of output prints the expanded form of C. """
+
+
+
+#main.py
+from string_compression import StringCompression
+
+def main():
+    # Take input for compression and expansion
+    input_string = input().strip()
+    compressed_string = input().strip()
+
+    # Create an instance of StringCompression
+    compressor = StringCompression()
+
+    # Call the compress_string method and print the result
+    compressed_result = compressor.compress_string(input_string)
+    print(compressed_result)
+
+    # Call the expand_string method and print the result
+    expanded_result = compressor.expand_string(compressed_string)
+    print(expanded_result)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+#sting .py
+
+class StringCompression:
+    
+    def compress_string(self, input_string):
+        compressed = []
+        count = 1
+        
+        # Traverse through the string to compress
+        for i in range(1, len(input_string)):
+            if input_string[i] == input_string[i - 1]:
+                count += 1
+            else:
+                compressed.append(input_string[i - 1] + str(count))
+                count = 1
+        
+        # Append the last character group
+        compressed.append(input_string[-1] + str(count))
+        
+        # Join the list into a compressed string
+        compressed_string = ''.join(compressed)
+        
+        # Return the original string if compression doesn't reduce length
+        if len(compressed_string) >= len(input_string):
+            return input_string
+        return compressed_string
+
+    def expand_string(self, compressed_string):
+        expanded = []
+        i = 0
+        
+        # Check for validity of the compressed string
+        while i < len(compressed_string):
+            if i + 1 < len(compressed_string) and compressed_string[i+1].isdigit():
+                count = int(compressed_string[i+1])
+                expanded.append(compressed_string[i] * count)
+                i += 2
+            else:
+                return "Invalid compressed string"
+        
+        return ''.join(expanded)
